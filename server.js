@@ -3,9 +3,10 @@ import express from 'express'
 import cors from 'cors'
 import connectDB from './config/db.js'
 import authRouter from './routes/authRoute.js'
-import transactionRouter from './routes/transactionRoute.js'
 import adminRouter from './routes/adminRoute.js'
+import transactionRouter from './routes/transactionRoute.js'
 import dashboardRouter from './routes/dashboardRoute.js'
+import analystRouter from './routes/analystRoute.js'
 
 // App config
 const app = express()
@@ -21,6 +22,7 @@ app.use('/api/auth', authRouter)
 app.use('/api/admin', adminRouter)
 app.use('/api/transactions', transactionRouter)
 app.use('/api/dashboard', dashboardRouter)
+app.use('/api/analyst', analystRouter)
 
 // Health check
 app.get('/', (req, res) => {
