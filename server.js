@@ -4,6 +4,8 @@ import cors from 'cors'
 import connectDB from './config/db.js'
 import authRouter from './routes/authRoute.js'
 import transactionRouter from './routes/transactionRoute.js'
+import adminRouter from './routes/adminRoute.js'
+import dashboardRouter from './routes/dashboardRoute.js'
 
 // App config
 const app = express()
@@ -18,6 +20,7 @@ app.use(express.json())
 app.use('/api/auth', authRouter)
 app.use('/api/admin', adminRouter)
 app.use('/api/transactions', transactionRouter)
+app.use('/api/dashboard', dashboardRouter)
 
 // Health check
 app.get('/', (req, res) => {
