@@ -1,13 +1,20 @@
 import transactionModel from '../models/Transaction.js'
 import auditLogModel from '../models/AuditLog.js'
 
-// API to create transaction (admin only)
 const createTransaction = async (req, res) => {
     try {
         const { amount, type, category, date, notes } = req.body
 
         if (!amount || !type || !category || !date) {
-            return res.json({ success: false, message: 'Missing Details' })
+            return res.status(400).json({ success: false, message: 'Missing Details' })
+        }
+
+        if (amount <= 0) {
+            return res.status(400).json({ success: false, message: 'Amount must be greater than zero' })
+        }
+
+        if (!['income', 'expense'].includes(type)) {
+            return res.status(400).json({ success: false, message: 'Type must be income or expense' })
         }
 
         const transactionData = {
@@ -22,7 +29,6 @@ const createTransaction = async (req, res) => {
         const newTransaction = new transactionModel(transactionData)
         const transaction = await newTransaction.save()
 
-        // Audit log
         await auditLogModel.create({
             performedBy: req.userId,
             action: 'CREATE_TRANSACTION',
@@ -31,31 +37,29 @@ const createTransaction = async (req, res) => {
             ipAddress: req.ip
         })
 
-        res.json({ success: true, message: 'Transaction Created', transaction })
+        res.status(201).json({ success: true, message: 'Transaction Created', transaction })
 
     } catch (error) {
         console.log(error)
-        res.json({ success: false, message: error.message })
+        res.status(500).json({ success: false, message: error.message })
     }
 }
 
-// API to get all transactions with filters
 const getTransactions = async (req, res) => {
     try {
-        const { type, category, startDate, endDate, page = 1, limit = 10 } = req.query
+        const { type, category, startDate, endDate, search, page = 1, limit = 10 } = req.query
 
-        // Build filter object
         const filter = { isDeleted: false }
 
         if (type) filter.type = type
         if (category) filter.category = category
+        if (search) filter.notes = { $regex: search, $options: 'i' }
         if (startDate || endDate) {
             filter.date = {}
             if (startDate) filter.date.$gte = new Date(startDate)
             if (endDate) filter.date.$lte = new Date(endDate)
         }
 
-        // Pagination
         const skip = (page - 1) * limit
         const total = await transactionModel.countDocuments(filter)
         const transactions = await transactionModel
@@ -65,7 +69,7 @@ const getTransactions = async (req, res) => {
             .skip(skip)
             .limit(Number(limit))
 
-        res.json({
+        res.status(200).json({
             success: true,
             transactions,
             pagination: {
@@ -77,31 +81,37 @@ const getTransactions = async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        res.json({ success: false, message: error.message })
+        res.status(500).json({ success: false, message: error.message })
     }
 }
 
-// API to update transaction (admin only)
 const updateTransaction = async (req, res) => {
     try {
         const { transactionId, amount, type, category, date, notes } = req.body
 
         if (!transactionId) {
-            return res.json({ success: false, message: 'Transaction ID Required' })
+            return res.status(400).json({ success: false, message: 'Transaction ID Required' })
+        }
+
+        if (amount && amount <= 0) {
+            return res.status(400).json({ success: false, message: 'Amount must be greater than zero' })
+        }
+
+        if (type && !['income', 'expense'].includes(type)) {
+            return res.status(400).json({ success: false, message: 'Type must be income or expense' })
         }
 
         const transaction = await transactionModel.findById(transactionId)
         if (!transaction || transaction.isDeleted) {
-            return res.json({ success: false, message: 'Transaction Not Found' })
+            return res.status(404).json({ success: false, message: 'Transaction Not Found' })
         }
 
         const updatedTransaction = await transactionModel.findByIdAndUpdate(
             transactionId,
             { amount, type, category, date, notes },
-            { new: true }
+            { returnDocument: 'after' }
         )
 
-        // Audit log
         await auditLogModel.create({
             performedBy: req.userId,
             action: 'UPDATE_TRANSACTION',
@@ -110,31 +120,29 @@ const updateTransaction = async (req, res) => {
             ipAddress: req.ip
         })
 
-        res.json({ success: true, message: 'Transaction Updated', transaction: updatedTransaction })
+        res.status(200).json({ success: true, message: 'Transaction Updated', transaction: updatedTransaction })
 
     } catch (error) {
         console.log(error)
-        res.json({ success: false, message: error.message })
+        res.status(500).json({ success: false, message: error.message })
     }
 }
 
-// API to soft delete transaction (admin only)
 const deleteTransaction = async (req, res) => {
     try {
         const { transactionId } = req.body
 
         if (!transactionId) {
-            return res.json({ success: false, message: 'Transaction ID Required' })
+            return res.status(400).json({ success: false, message: 'Transaction ID Required' })
         }
 
         const transaction = await transactionModel.findById(transactionId)
         if (!transaction || transaction.isDeleted) {
-            return res.json({ success: false, message: 'Transaction Not Found' })
+            return res.status(404).json({ success: false, message: 'Transaction Not Found' })
         }
 
         await transactionModel.findByIdAndUpdate(transactionId, { isDeleted: true })
 
-        // Audit log
         await auditLogModel.create({
             performedBy: req.userId,
             action: 'DELETE_TRANSACTION',
@@ -143,11 +151,11 @@ const deleteTransaction = async (req, res) => {
             ipAddress: req.ip
         })
 
-        res.json({ success: true, message: 'Transaction Deleted' })
+        res.status(200).json({ success: true, message: 'Transaction Deleted' })
 
     } catch (error) {
         console.log(error)
-        res.json({ success: false, message: error.message })
+        res.status(500).json({ success: false, message: error.message })
     }
 }
 

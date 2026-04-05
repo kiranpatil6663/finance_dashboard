@@ -117,5 +117,44 @@ const getRecentActivity = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
+// API to get weekly trends
+const getWeeklyTrends = async (req, res) => {
+    try {
+        const trends = await transactionModel.aggregate([
+            { $match: { isDeleted: false } },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: '$date' },
+                        week: { $week: '$date' },
+                        type: '$type'
+                    },
+                    total: { $sum: '$amount' }
+                }
+            },
+            {
+                $project: {
+                    year: '$_id.year',
+                    week: '$_id.week',
+                    type: '$_id.type',
+                    total: 1,
+                    _id: 0
+                }
+            },
+            { $sort: { year: 1, week: 1 } }
+        ])
 
-export { getDashboardSummary, getCategoryTotals, getMonthlyTrends, getRecentActivity }
+        res.status(200).json({ success: true, trends })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success: false, message: error.message })
+    }
+}
+export { 
+    getDashboardSummary, 
+    getCategoryTotals, 
+    getMonthlyTrends, 
+    getWeeklyTrends,
+    getRecentActivity 
+}

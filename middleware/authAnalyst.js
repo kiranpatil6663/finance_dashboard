@@ -5,16 +5,16 @@ const authAnalyst = async (req, res, next) => {
     try {
         const { token } = req.headers
         if (!token) {
-            return res.json({ success: false, message: 'Not Authorized, Login Again' })
+            return res.status(401).json({ success: false, message: 'Not Authorized, Login Again' })
         }
         const token_decode = jwt.verify(token, process.env.JWT_SECRET)
         const user = await userModel.findById(token_decode.id)
 
         if (!user || (user.role !== 'analyst' && user.role !== 'admin')) {
-            return res.json({ success: false, message: 'Access Denied, Analysts Only' })
+            return res.status(403).json({ success: false, message: 'Access Denied, Analysts Only' })
         }
         if (!user.isActive) {
-            return res.json({ success: false, message: 'Account Deactivated' })
+            return res.status(403).json({ success: false, message: 'Account Deactivated' })
         }
 
         req.userId = token_decode.id
@@ -23,7 +23,7 @@ const authAnalyst = async (req, res, next) => {
 
     } catch (error) {
         console.log(error)
-        res.json({ success: false, message: error.message })
+        res.status(500).json({ success: false, message: error.message })
     }
 }
 
