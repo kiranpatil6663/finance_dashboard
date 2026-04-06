@@ -1,0 +1,495 @@
+{
+  "info": {
+    "_postman_id": "3120f4b4-62a3-45f8-b836-f561ba254fda",
+    "name": "Finance Dashboard API",
+    "description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" alt=\"\" height=\"1530\" width=\"2162\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "37313668"
+  },
+  "item": [
+    {
+      "name": "Login User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Successful POST request\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:4000/api/admin/add-doctor",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "4000",
+          "path": [
+            "api",
+            "admin",
+            "add-doctor"
+          ]
+        },
+        "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+      },
+      "response": []
+    },
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Admin3 User\",\r\n  \"email\": \"admin3@finance.com\",\r\n  \"password\": \"admin123\",\r\n  \"role\": \"admin\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/auth/register",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Transaction",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDI1MTFjMzA0MzU1MTg3ZWI2YTI2NSIsImlhdCI6MTc3NTM5MTAwNCwiZXhwIjoxNzc1OTk1ODA0fQ.8DXFHbnO8Mqx75dnZPsc0xf_wWMj69V3QulTAdrQb1Q",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"amount\": 325200,\r\n  \"type\": \"income\",\r\n  \"category\": \"Salary\",\r\n  \"date\": \"2026-03-01\",\r\n  \"notes\": \"Monthly salary\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/transactions/create",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "transactions",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Transactions",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDI1MTFjMzA0MzU1MTg3ZWI2YTI2NSIsImlhdCI6MTc3NTM5MTAwNCwiZXhwIjoxNzc1OTk1ODA0fQ.8DXFHbnO8Mqx75dnZPsc0xf_wWMj69V3QulTAdrQb1Q",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/transactions/list",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "transactions",
+            "list"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Transactions - Filter by Type",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDI1MTFjMzA0MzU1MTg3ZWI2YTI2NSIsImlhdCI6MTc3NTM5MTAwNCwiZXhwIjoxNzc1OTk1ODA0fQ.8DXFHbnO8Mqx75dnZPsc0xf_wWMj69V3QulTAdrQb1Q",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/transactions/list?type=income",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "transactions",
+            "list"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "income"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Transaction",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/transactions/list?type=income",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "transactions",
+            "list"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "income"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Transaction",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDI1MTFjMzA0MzU1MTg3ZWI2YTI2NSIsImlhdCI6MTc3NTM5MTAwNCwiZXhwIjoxNzc1OTk1ODA0fQ.8DXFHbnO8Mqx75dnZPsc0xf_wWMj69V3QulTAdrQb1Q",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"transactionId\": \"69d2521a304355187eb6a270\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/transactions/update",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "transactions",
+            "update"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Dashboard Summary",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Category Totals",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDI1MGFhMzA0MzU1MTg3ZWI2YTI1ZiIsImlhdCI6MTc3NTM5MDg5MCwiZXhwIjoxNzc1OTk1NjkwfQ.U0GQtElH3lV55f6yXZLKkDC-pv3HBbglHpK4qq9WxTU",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/dashboard/categories",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "dashboard",
+            "categories"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Monthly Trends",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Weekly Trends",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDI1MTFjMzA0MzU1MTg3ZWI2YTI2NSIsImlhdCI6MTc3NTM5MTAwNCwiZXhwIjoxNzc1OTk1ODA0fQ.8DXFHbnO8Mqx75dnZPsc0xf_wWMj69V3QulTAdrQb1Q",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/dashboard/trends/weekly",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "dashboard",
+            "trends",
+            "weekly"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Recent Activity",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Users",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDI1MTFjMzA0MzU1MTg3ZWI2YTI2NSIsImlhdCI6MTc3NTM5MTAwNCwiZXhwIjoxNzc1OTk1ODA0fQ.8DXFHbnO8Mqx75dnZPsc0xf_wWMj69V3QulTAdrQb1Q",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/admin/users",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update User Role",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDI1MTFjMzA0MzU1MTg3ZWI2YTI2NSIsImlhdCI6MTc3NTM5MTAwNCwiZXhwIjoxNzc1OTk1ODA0fQ.8DXFHbnO8Mqx75dnZPsc0xf_wWMj69V3QulTAdrQb1Q",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"userId\": \"paste user id\",\r\n  \"role\": \"analyst\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/admin/update-role",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "update-role"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Toggle User Status",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDI1MTFjMzA0MzU1MTg3ZWI2YTI2NSIsImlhdCI6MTc3NTM5MTAwNCwiZXhwIjoxNzc1OTk1ODA0fQ.8DXFHbnO8Mqx75dnZPsc0xf_wWMj69V3QulTAdrQb1Q",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"userId\": \"69d250f2304355187eb6a262\"\r\n}"
+        },
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/admin/toggle-status",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "toggle-status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Analyst Insights",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDI1MTFjMzA0MzU1MTg3ZWI2YTI2NSIsImlhdCI6MTc3NTM5MTAwNCwiZXhwIjoxNzc1OTk1ODA0fQ.8DXFHbnO8Mqx75dnZPsc0xf_wWMj69V3QulTAdrQb1Q",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"userId\": \"69d250f2304355187eb6a262\"\r\n}"
+        },
+        "url": {
+          "raw": "https://finance-dashboard-rol9.onrender.com/api/analyst/insights",
+          "protocol": "https",
+          "host": [
+            "finance-dashboard-rol9",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "analyst",
+            "insights"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "id",
+      "value": "1"
+    },
+    {
+      "key": "base_url",
+      "value": "https://postman-rest-api-learner.glitch.me/"
+    }
+  ]
+}
